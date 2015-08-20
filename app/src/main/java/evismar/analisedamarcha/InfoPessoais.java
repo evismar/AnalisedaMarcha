@@ -23,7 +23,7 @@ public class InfoPessoais extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_pessoais);
-
+        //commit teste
         iniciar = (Button) findViewById(R.id.iniciar);
         iniciar.setOnClickListener(new View.OnClickListener() {
 
