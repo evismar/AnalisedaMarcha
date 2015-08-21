@@ -77,6 +77,7 @@ public class Medicao extends AppCompatActivity implements SensorEventListener {
 //        senSensorManagerQtn = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 //        senQuaternion = senSensorManagerQtn.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
 //        senSensorManagerQtn.registerListener(this, senQuaternion, SensorManager.SENSOR_DELAY_FASTEST);
+
        texto = new StringBuilder();
 
         timerValue = (TextView) findViewById(R.id.timerValue);
