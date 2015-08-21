@@ -31,11 +31,11 @@ import android.widget.Toast;
 public class Medicao extends AppCompatActivity implements SensorEventListener {
 
     private SensorManager senSensorManagerAcc;
-    private SensorManager senSensorManagerGyr;
-    private SensorManager senSensorManagerQtn;
+   // private SensorManager senSensorManagerGyr;
+    //private SensorManager senSensorManagerQtn;
     private Sensor senAccelerometer;
-    private Sensor senGyroscope;
-    private Sensor senQuaternion;
+   // private Sensor senGyroscope;
+   // private Sensor senQuaternion;
     private StringBuilder texto;
     private String linha = new String();
     Button button;
@@ -61,19 +61,23 @@ public class Medicao extends AppCompatActivity implements SensorEventListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medicao);
 
+        int delay = 100;
+
         infoPessoal = getIntent().getStringExtra("infoPessoal");
 
         senSensorManagerAcc = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         senAccelerometer = senSensorManagerAcc.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         senSensorManagerAcc.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_FASTEST);
-        senSensorManagerGyr = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        senGyroscope = senSensorManagerGyr.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-        senSensorManagerGyr.registerListener(this, senGyroscope, SensorManager.SENSOR_DELAY_FASTEST);
 
-        senSensorManagerQtn = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        senQuaternion = senSensorManagerQtn.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
-        senSensorManagerQtn.registerListener(this, senQuaternion, SensorManager.SENSOR_DELAY_FASTEST);
-        texto = new StringBuilder();
+
+//        senSensorManagerGyr = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+//        senGyroscope = senSensorManagerGyr.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+//        senSensorManagerGyr.registerListener(this, senGyroscope, SensorManager.SENSOR_DELAY_FASTEST);
+//
+//        senSensorManagerQtn = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+//        senQuaternion = senSensorManagerQtn.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+//        senSensorManagerQtn.registerListener(this, senQuaternion, SensorManager.SENSOR_DELAY_FASTEST);
+       texto = new StringBuilder();
 
         timerValue = (TextView) findViewById(R.id.timerValue);
         startButton = (Button) findViewById(R.id.startButton);
@@ -153,34 +157,38 @@ public class Medicao extends AppCompatActivity implements SensorEventListener {
                 }
             }
             if (sensorEvent.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
-
-                if(linha.equalsIgnoreCase("")){
-                    linha = "Accelerometer:, " + (System.currentTimeMillis()-tempoInicial) + "," + sensorEvent.values[0] + "," + sensorEvent.values[1] + "," + sensorEvent.values[2] + ",";
-                }
-                else{
-                    if(!linha.contains("Gyr") && !linha.contains("Quat")){
-                        linha = "Accelerometer:, " + (System.currentTimeMillis()-tempoInicial) + "," + sensorEvent.values[0] + "," + sensorEvent.values[1] + "," + sensorEvent.values[2] + ",";
-                    }
-                }
-
-
+                linha = "Accelerometer:, " + (System.currentTimeMillis()-tempoInicial) + "," + sensorEvent.values[0] + "," + sensorEvent.values[1] + "," + sensorEvent.values[2] + "\n";
+                texto.append(linha);
             }
+//            if (sensorEvent.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
+//
+//                if(linha.equalsIgnoreCase("")){
+//                    linha = "Accelerometer:, " + (System.currentTimeMillis()-tempoInicial) + "," + sensorEvent.values[0] + "," + sensorEvent.values[1] + "," + sensorEvent.values[2] + ",";
+//                }
+//                else{
+//                    if(!linha.contains("Gyr") && !linha.contains("Quat")){
+//                        linha = "Accelerometer:, " + (System.currentTimeMillis()-tempoInicial) + "," + sensorEvent.values[0] + "," + sensorEvent.values[1] + "," + sensorEvent.values[2] + ",";
+//                    }
+//                }
+//
+//
+//        }
 
-            if (sensorEvent.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
-
-                if(linha.contains("Acc") && !linha.contains("Gyr") && !linha.contains("Quat")){
-                    linha+="Gyrometer:," + (System.currentTimeMillis()-tempoInicial) + "," + sensorEvent.values[0] + "," + sensorEvent.values[1] + "," + sensorEvent.values[2]+",";
-                }
-
-            }
-            if(sensorEvent.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR){
-                if(linha.contains("Gyr")){
-                    linha+=" Quaternion:," + (System.currentTimeMillis()-tempoInicial) + "," + sensorEvent.values[0] + "," + sensorEvent.values[1] + "," + sensorEvent.values[2]+ "," + sensorEvent.values[3]+"\n";
-                    texto.append(linha);
-                    linha = "";
-                }
-
-            }
+//            if (sensorEvent.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
+//
+//                if(linha.contains("Acc") && !linha.contains("Gyr") && !linha.contains("Quat")){
+//                    linha+="Gyrometer:," + (System.currentTimeMillis()-tempoInicial) + "," + sensorEvent.values[0] + "," + sensorEvent.values[1] + "," + sensorEvent.values[2]+",";
+//                }
+//
+//            }
+//            if(sensorEvent.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR){
+//                if(linha.contains("Gyr")){
+//                    linha+=" Quaternion:," + (System.currentTimeMillis()-tempoInicial) + "," + sensorEvent.values[0] + "," + sensorEvent.values[1] + "," + sensorEvent.values[2]+ "," + sensorEvent.values[3]+"\n";
+//                    texto.append(linha);
+//                    linha = "";
+//                }
+//
+//            }
         }
 
 
@@ -222,7 +230,7 @@ public class Medicao extends AppCompatActivity implements SensorEventListener {
         Log.i("LogDoEvinho", Environment.getExternalStorageDirectory().getPath());
 
         senSensorManagerAcc.unregisterListener(this);
-        senSensorManagerGyr.unregisterListener(this);
+       // senSensorManagerGyr.unregisterListener(this);
         try {
             Log.i("LogDoEvinho", "");
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(openFileOutput("dados_medicao.txt", Context.CONTEXT_IGNORE_SECURITY));
