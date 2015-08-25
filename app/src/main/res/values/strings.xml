@@ -10,6 +10,12 @@
 <string name="startButtonLabel">Iniciar</string>
     <string name="enviarButtonLabel">Enviar</string>
     <string name="reiniciarButtonLabel">Reiniciar</string>
+    <string name="title_activity_preparacao">Preparacao</string>
+
+    <color name="blue">#36AAE9</color>
+    <color name="white">#FFFFFF</color>
+    <color name="green">#24AB3D</color>
+    <color name="puple">#AB2493</color>
 
 
 </resources>
