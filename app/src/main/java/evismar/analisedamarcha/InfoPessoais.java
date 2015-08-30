@@ -1,6 +1,9 @@
 package evismar.analisedamarcha;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,23 +14,36 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+
+import br.com.jansenfelipe.androidmask.MaskEditTextChangedListener;
 
 
 public class InfoPessoais extends AppCompatActivity {
 
     private Button iniciar;
+    private Button dataPicker;
+
+    int year, month, day;
+    static  final  int DIOLOG_ID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
        setContentView(R.layout.activity_info_pessoais);
-
+        final Calendar cal = Calendar.getInstance();
+        year = cal.get(Calendar.YEAR);
+        month = cal.get(Calendar.MONTH);
+        day = cal.get(Calendar.DAY_OF_MONTH);
+        showDiologMethodClick();
 
         Spinner dropdown = (Spinner)findViewById(R.id.sexo);
         String[] items = new String[]{"Masculino", "Feminino"};
@@ -47,8 +63,9 @@ public class InfoPessoais extends AppCompatActivity {
                 EditText editText = (EditText)findViewById(R.id.nome);
                 String nome = editText.getText().toString();
 
-                EditText idadeText = (EditText)findViewById(R.id.idade);
-                String idade = idadeText.getText().toString();
+                final EditText campo_data_nascimento = (EditText) findViewById(R.id.idade);
+                campo_data_nascimento.addTextChangedListener(Mask.insert("##/##/####", campo_data_nascimento));
+                String idade = campo_data_nascimento.getText().toString();
 
                 Spinner sexoText = (Spinner)findViewById(R.id.sexo);
                 String sexo = sexoText.getSelectedItem().toString();
@@ -96,5 +113,38 @@ public class InfoPessoais extends AppCompatActivity {
             }
         });
     }
+
+    public void showDiologMethodClick(){
+        dataPicker = (Button)findViewById(R.id.dataPickerButton);
+        dataPicker.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showDialog(DIOLOG_ID);
+                    }
+                }
+
+        );
+    }
+
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        if(id == DIOLOG_ID){
+            return new DatePickerDialog(this, dataPickerButton, year, month, day);
+        }
+        else{
+            return  null;
+        }
+    }
+    private DatePickerDialog.OnDateSetListener dataPickerButton = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker datePicker, int year2, int month3, int day4) {
+            year = year2;
+            month = month3 + 1;
+            day = day4;
+            Toast.makeText(InfoPessoais.this, year+"//"+month+"//"+day,Toast.LENGTH_LONG).show();
+        }
+    };
 
 }
