@@ -3,6 +3,7 @@ package evismar.analisedamarcha;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.media.Image;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -16,7 +17,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DateFormat;
@@ -30,7 +33,7 @@ import br.com.jansenfelipe.androidmask.MaskEditTextChangedListener;
 public class InfoPessoais extends AppCompatActivity {
 
     private Button iniciar;
-    private Button dataPicker;
+    private ImageButton dataPicker;
 
     int year, month, day;
     static  final  int DIOLOG_ID = 0;
@@ -51,10 +54,9 @@ public class InfoPessoais extends AppCompatActivity {
         dropdown.setAdapter(adapter);
 
         Spinner dropdown2 = (Spinner)findViewById(R.id.etnia);
-        String[] items2 = new String[]{"Caucasiano", "Negro","Pardo"};
+        String[] items2 = new String[]{"Caucasiana", "Negra","Parda"};
         ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items2);
         dropdown2.setAdapter(adapter2);
-//        //commit teste
         iniciar = (Button) findViewById(R.id.iniciar);
         iniciar.setOnClickListener(new View.OnClickListener() {
 
@@ -63,8 +65,7 @@ public class InfoPessoais extends AppCompatActivity {
                 EditText editText = (EditText)findViewById(R.id.nome);
                 String nome = editText.getText().toString();
 
-                final EditText campo_data_nascimento = (EditText) findViewById(R.id.idade);
-                campo_data_nascimento.addTextChangedListener(Mask.insert("##/##/####", campo_data_nascimento));
+                TextView campo_data_nascimento = (TextView) findViewById(R.id.idade);
                 String idade = campo_data_nascimento.getText().toString();
 
                 Spinner sexoText = (Spinner)findViewById(R.id.sexo);
@@ -89,10 +90,10 @@ public class InfoPessoais extends AppCompatActivity {
                 DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
                 Date data = new Date();
 
-                String texto = "Dados do participante:\n \nNome: "+nome+"\nIdade: "+idade+"\n \nColeta de dados realizada no dia:"+df.format(data);
+                String texto = "Dados do participante:\n \nNome: "+nome+"\nData Nasc: "+idade+"\n \nColeta de dados realizada no dia:"+df.format(data);
 
                 String cabecalho = "Nome:,"+nome+"\n";
-                cabecalho += "Idade:,"+idade+"\n";
+                cabecalho += "Data Nasc.:,"+idade+"\n";
                 cabecalho +="Sexo:,"+sexo+"\n";
                 cabecalho +="Peso:,"+peso+"\n";
                 cabecalho +="Altura:,"+altura+"\n";
@@ -115,7 +116,7 @@ public class InfoPessoais extends AppCompatActivity {
     }
 
     public void showDiologMethodClick(){
-        dataPicker = (Button)findViewById(R.id.dataPickerButton);
+        dataPicker = (ImageButton)findViewById(R.id.dataPickerButton);
         dataPicker.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -143,7 +144,9 @@ public class InfoPessoais extends AppCompatActivity {
             year = year2;
             month = month3 + 1;
             day = day4;
-            Toast.makeText(InfoPessoais.this, year+"//"+month+"//"+day,Toast.LENGTH_LONG).show();
+            TextView campo_data_nascimento = (TextView) findViewById(R.id.idade);
+            campo_data_nascimento.setText(day+"/"+month+"/"+year);
+            //Toast.makeText(InfoPessoais.this, day+"/"+month+"/"+year,Toast.LENGTH_LONG).show();
         }
     };
 
