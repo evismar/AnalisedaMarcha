@@ -36,10 +36,8 @@ public class Medicao extends AppCompatActivity implements SensorEventListener {
 
     private SensorManager senSensorManagerAcc;
     private SensorManager senSensorManagerGyr;
-    //private SensorManager senSensorManagerQtn;
     private Sensor senAccelerometer;
     private Sensor senGyroscope;
-    // private Sensor senQuaternion;
     private StringBuilder texto;
     private String linha = new String();
     Button button;
@@ -61,8 +59,8 @@ public class Medicao extends AppCompatActivity implements SensorEventListener {
     String infoPessoal;
     long tempoInicial = 0;
     String cabecalho = "";
-    boolean acc = true;
-    boolean gyr = false;
+    boolean acc = false;
+    boolean gyr = true;
     float currentGyr = 0;
     int qtdPassos = 0;
     int qtdFinalPassos = 0;
@@ -89,11 +87,6 @@ public class Medicao extends AppCompatActivity implements SensorEventListener {
         senSensorManagerGyr = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         senGyroscope = senSensorManagerGyr.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         senSensorManagerGyr.registerListener(this, senGyroscope, SensorManager.SENSOR_DELAY_FASTEST);
-
-//        senSensorManagerQtn = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-//        senQuaternion = senSensorManagerQtn.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
-//        senSensorManagerQtn.registerListener(this, senQuaternion, SensorManager.SENSOR_DELAY_FASTEST);
-
         texto = new StringBuilder();
 
         timerValue = (TextView) findViewById(R.id.timerValue);
@@ -121,11 +114,6 @@ public class Medicao extends AppCompatActivity implements SensorEventListener {
             public void onClick(View view) {
                 enviaEmail();
 
-                //              finish();
-                //              startActivity(getIntent());
-                //TODO
-                //Voltar a página inicial
-
             }
         });
 
@@ -144,7 +132,6 @@ public class Medicao extends AppCompatActivity implements SensorEventListener {
         pauseButton.setEnabled(true);
 
         reiniciarButton.setEnabled(false);
-//        pauseButton.setEnabled(false);
         enviarButton.setEnabled(false);
 
     }
@@ -168,7 +155,7 @@ public class Medicao extends AppCompatActivity implements SensorEventListener {
                             + tempoDecorrido + ","
                             + sensorEvent.values[0] + ","
                             + sensorEvent.values[1] + ","
-                            + sensorEvent.values[2] + ",";
+                            + sensorEvent.values[2] + "\n";
                     acc = false;
                     gyr = true;
                 }
@@ -182,7 +169,7 @@ public class Medicao extends AppCompatActivity implements SensorEventListener {
                             + tempoDecorrido + ","
                             + sensorEvent.values[0] + ","
                             + sensorEvent.values[1] + ","
-                            + sensorEvent.values[2] + "\n";
+                            + sensorEvent.values[2] + ",";
                     acc = true;
                     gyr = false;
                 }
@@ -252,6 +239,9 @@ public class Medicao extends AppCompatActivity implements SensorEventListener {
         senSensorManagerAcc.unregisterListener(this);
         // senSensorManagerGyr.unregisterListener(this);
         try {
+
+            texto.insert(0, "Num passos dados:,"+qtdPassos+"\n");
+            texto.insert(0, "Duração total:,"+tempoDecorrido+"\n");
             Log.i("LogDoEvinho", "");
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(openFileOutput("dados_medicao.txt", Context.CONTEXT_IGNORE_SECURITY));
             outputStreamWriter.write(texto.toString());
